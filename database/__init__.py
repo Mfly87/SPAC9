@@ -1,1 +1,1 @@
-from .dataClasses import AbsObj, CerealObj, NutritionalValueObj
+from .dataClasses import DataFactory, AbsObj, CerealObj, NutritionalValueObj

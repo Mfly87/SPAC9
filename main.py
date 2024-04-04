@@ -1,16 +1,17 @@
 from app import app
 
+print("\n\n")
+
 #app.run(debug=True)
 
 
-from database import NutritionalValueObj, CerealObj
+from database import NutritionalValueObj, CerealObj, DataFactory
 
-a = NutritionalValueObj(5,-5,5,5,5,5,5,5,5)
+a = NutritionalValueObj(5,5,5,5,5,5,5,5,5)
 b = CerealObj("abc","abc",a,1,2,3,4)
 
-print("\n\n")
-print(a.to_dict())
-print(a.is_valid())
-print("\n\n")
-print(b.to_dict())
-print(b.is_valid())
+
+_dict = b.to_dict()
+_list = DataFactory.create_from_dict(**_dict)
+for _item in _list:
+    print(_item.nutritions.to_dict())
