@@ -5,7 +5,7 @@ print("\n\n")
 #app.run(debug=True)
 
 
-from database import NutritionalValueObj, CerealObj, DataFactory
+from dataClasses import NutritionalValueObj, CerealObj, DataFactory
 
 a = NutritionalValueObj(5,5,5,5,5,5,5,5,5)
 b = CerealObj("abc","abc",a,1,2,3,4)
