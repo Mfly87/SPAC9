@@ -47,7 +47,7 @@ class DataFactory():
         return DataFactory._create_list_of_valid_objects( _obj )
     
     @staticmethod
-    def create_cereal(*, name:str, manufacturer:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:float) -> list[NutritionalValueObj]:
-        _obj = CerealObj(name, manufacturer, nutritions, shelf_number, weight_per_serving, cups_per_serving, rating)
+    def create_cereal(*, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:float) -> list[NutritionalValueObj]:
+        _obj = CerealObj(name, manufacturer, serve_type, nutritions, shelf_number, weight_per_serving, cups_per_serving, rating)
         return DataFactory._create_list_of_valid_objects( _obj )
     

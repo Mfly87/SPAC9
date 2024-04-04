@@ -1,19 +1,22 @@
 from .abs_obj import AbsObj
 
-from ..guardFunctions.float_guard import float_is_zero_or_greater, float_is_between_one_and_one_hundred
-from ..guardFunctions.int_guard import int_is_one_or_greater
+from ..guardFunctions.float_guard import float_is_zero_or_greater
+from ..guardFunctions.int_guard import int_is_zero_or_greater, int_is_one_or_greater
 from ..guardFunctions.string_guard import str_is_not_empty
 
 from .nutritional_value_obj import NutritionalValueObj
 
 class CerealObj(AbsObj):
-    def __init__(self, name:str, manufacturer:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:float) -> None:
+    def __init__(self, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:int) -> None:
         
         self._name:str = None
         self.name:str = name
 
         self._manufacturer:str = None
         self.manufacturer:str = manufacturer
+
+        self._serve_type:str = None
+        self.serve_type:str = serve_type
 
         self._nutritions:NutritionalValueObj = None
         self.nutritions:NutritionalValueObj = nutritions
@@ -27,8 +30,8 @@ class CerealObj(AbsObj):
         self._cups_per_serving:float = None
         self.cups_per_serving:float = cups_per_serving
 
-        self._rating:float = None
-        self.rating:float = rating
+        self._rating:int = None
+        self.rating:int = rating
 
     @property
     def name(self) -> str:
@@ -47,6 +50,15 @@ class CerealObj(AbsObj):
         _value = str_is_not_empty(value)
         if _value is not None:
             self._manufacturer = value
+
+    @property
+    def serve_type(self) -> str:
+        return self._serve_type
+    @serve_type.setter
+    def serve_type(self, value) -> None:
+        _value = str_is_not_empty(value)
+        if _value is not None:
+            self._serve_type = value
 
     @property
     def nutritions(self) -> NutritionalValueObj:
@@ -87,11 +99,11 @@ class CerealObj(AbsObj):
             self._cups_per_serving = value
 
     @property
-    def rating(self) -> float:
+    def rating(self) -> int:
         return self._rating
     @rating.setter
     def rating(self, value) -> None:
-        _value = float_is_between_one_and_one_hundred(value)
+        _value = int_is_zero_or_greater(value)
         if _value is not None:
             self._rating = value
 
@@ -99,7 +111,8 @@ class CerealObj(AbsObj):
     def get_headers() -> list[str]:
         return [
             "name", 
-            "manufacturer", 
+            "manufacturer",
+            "serve_type", 
             "nutritions", 
             "shelf_number", 
             "weight_per_serving", 
@@ -109,12 +122,13 @@ class CerealObj(AbsObj):
     
     @staticmethod
     def get_types() -> list[type]:
-        return [str, str, NutritionalValueObj, int, float, float, float]
+        return [str, str, NutritionalValueObj, int, float, float, int]
     
     def to_list(self) -> list[any]:
         return [
             self.name, 
-            self.manufacturer, 
+            self.manufacturer,
+            self.serve_type,
             None if self.nutritions is None else self.nutritions.to_dict(), 
             self.shelf_number, 
             self.weight_per_serving, 
@@ -124,6 +138,6 @@ class CerealObj(AbsObj):
     
     def to_string(self) -> str:
         _zip = zip(self.get_headers(), self.to_list())
-        _list = ["%s: %s" % (a.replace("_"," "), b) for a, b in _zip]
-        del _list[2]
+        _list = ["%s: %s" % (a.split("_")[0], b) for a, b in _zip]
+        del _list[3]
         return " | ".join(_list)
