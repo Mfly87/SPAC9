@@ -121,3 +121,9 @@ class CerealObj(AbsObj):
             self.cups_per_serving, 
             self.rating,
             ]
+    
+    def to_string(self) -> str:
+        _zip = zip(self.get_headers(), self.to_list())
+        _list = ["%s: %s" % (a.replace("_"," "), b) for a, b in _zip]
+        del _list[2]
+        return " | ".join(_list)

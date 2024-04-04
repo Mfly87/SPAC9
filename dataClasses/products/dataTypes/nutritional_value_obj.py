@@ -142,4 +142,8 @@ class NutritionalValueObj(AbsObj):
             self.potassium, 
             self.vitamins,
             ]
-    
+        
+    def to_string(self) -> str:
+        _zip = zip(self.get_headers(), self.to_list())
+        _list = ["%s: %s" % (a[0:3], b) for a, b in _zip]
+        return " | ".join(_list)

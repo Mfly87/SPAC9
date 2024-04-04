@@ -12,6 +12,6 @@ b = CerealObj("abc","abc",a,1,2,3,4)
 
 
 _dict = b.to_dict()
-_list = DataFactory.create_from_dict(**_dict)
+_list:list[CerealObj] = DataFactory.create_from_dict(**_dict)
 for _item in _list:
-    print(_item.nutritions.to_dict())
+    print(_item.to_string())
