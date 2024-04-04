@@ -122,14 +122,14 @@ class CerealObj(AbsObj):
     
     @staticmethod
     def get_types() -> list[type]:
-        return [str, str, NutritionalValueObj, int, float, float, int]
+        return [str, str, str, NutritionalValueObj, int, float, float, int]
     
     def to_list(self) -> list[any]:
         return [
             self.name, 
             self.manufacturer,
             self.serve_type,
-            None if self.nutritions is None else self.nutritions.to_dict(), 
+            self.nutritions, 
             self.shelf_number, 
             self.weight_per_serving, 
             self.cups_per_serving, 

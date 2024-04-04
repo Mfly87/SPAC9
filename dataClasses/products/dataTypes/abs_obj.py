@@ -1,6 +1,6 @@
 from ...abs_data_class import AbsDataClass
 import abc
-
+from typing import Callable
 class AbsObj(AbsDataClass):
     
     @abc.abstractstaticmethod
@@ -16,10 +16,39 @@ class AbsObj(AbsDataClass):
         pass
     
     def to_dict(self) -> dict[str,any]:
-        _dict = dict(zip(self.get_headers(), self.to_list()))
+        _list = self.to_list()
+        for i, _value in enumerate(_list):
+            if _value is None:
+                continue
+            if issubclass(type(_value), AbsObj):
+                _list[i] = _value.to_dict()
+
+        _dict = dict(zip(self.get_headers(), _list))
         _dict |= {"class": self.__class__.__name__}
         return _dict
     
+
+    def get_build_values(self) -> list[any]:
+        _list_of_values: list = [self.__class__.__name__]
+        for _value, _type in zip(self.to_list(), self.get_types()):
+            if issubclass(_type, AbsObj):
+                _list_of_values += _value.get_build_values()[1:]
+            else:
+                _list_of_values.append(_value)
+        return _list_of_values
+
+    @staticmethod
+    def get_build_headers(_class_type) -> list[any]:
+        _list_of_headers: list = ["class"]
+        for _value, _type in zip(_class_type.get_headers(), _class_type.get_types()):
+            if issubclass(_type, AbsObj):
+                _list_of_headers += AbsObj.get_build_headers(_type)[1:]
+            else:
+                _list_of_headers.append(_value)
+        return _list_of_headers
+
+
+
     def is_valid(self):
         '''Returns False if any parameters have not been set'''
         _dict_of_obj = self.to_dict()
