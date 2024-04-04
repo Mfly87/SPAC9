@@ -1,6 +1,7 @@
+from ...abs_data_class import AbsDataClass
 import abc
 
-class AbsObj(abc.ABC):
+class AbsObj(AbsDataClass):
     
     @abc.abstractstaticmethod
     def get_headers() -> list[str]:
