@@ -1,4 +1,4 @@
-from dataClasses.products import AbsObj, NutritionalValueObj, CerealObj, ProductFactory
+from dataClasses.products import AbsSQLObj, NutritionalValueObj, CerealObj, ProductFactory
 import csv
 
 _serve_type_dict = {
@@ -23,18 +23,16 @@ def get_objects_from_Cereal_csv(path:str, *, delimiter = ";", rows_skipped:int =
     with open(path, 'r') as file:
         reader = csv.reader(file, delimiter=delimiter)
         for _ in range(rows_skipped):
-            next(reader)  # Skip the header line
+            next(reader)
+
         for row in reader:
             replace_shorthand(row)
 
-            row.insert(0, "")
-            row.insert(0, CerealObj.__name__)
+            row.insert(0, "") # id
+            row.insert(0, CerealObj.__name__) # class
             for _obj in ProductFactory.create_from_build_values(row):
                 _list.append(_obj)
 
-            #_build_dict = build_factory_dict(row)
-            #for _obj in ProductFactory.create_from_dict(**_build_dict):
-            #    _list.append(_obj)
     return _list
 
 def replace_shorthand(row:list[str]) -> None:
@@ -54,7 +52,7 @@ def build_factory_dict(row:list[str]) -> dict[str,any]:
 
     return _cereal_build_dict
 
-def dict_from_rows(class_type:AbsObj, values:list[any]):
+def dict_from_rows(class_type:AbsSQLObj, values:list[any]):
     _dict = dict(zip(class_type.get_headers(), values))
     _dict |= {"class": class_type.__name__}
     return _dict

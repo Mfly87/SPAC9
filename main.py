@@ -1,7 +1,7 @@
-from dataClasses.products import CerealObj, AbsObj, ProductFactory
+from dataClasses.products import CerealObj, AbsSQLObj, ProductFactory
 from importFiles.ceral_csv_reader import get_objects_from_Cereal_csv
 
-from database import MySQLServerCredentials, MySQLServerConnection, MySQLHandler
+from database import MySQLServerCredentials, MySQLServerConnection, MySQLHandler, MySQLQueryGenerator
 
 from faker import Faker
 from app import app
@@ -33,6 +33,5 @@ sql_handler.connect_to_database(_database_name)
 sql_handler.drop_table(CerealObj)
 sql_handler.create_table(CerealObj)
 _ret = sql_handler.execute_insert_many_querty(_list)
-print(_ret)
 
-#app.run(debug=True)
+app.run(debug=True)

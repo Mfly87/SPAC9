@@ -1,4 +1,4 @@
-from .abs_obj import AbsObj
+from .abs_obj import AbsSQLObj
 
 from ..guardFunctions.float_guard import float_is_zero_or_greater
 from ..guardFunctions.int_guard import int_is_zero_or_greater, int_is_one_or_greater
@@ -6,7 +6,7 @@ from ..guardFunctions.string_guard import str_is_not_empty
 
 from .nutritional_value_obj import NutritionalValueObj
 
-class CerealObj(AbsObj):
+class CerealObj(AbsSQLObj):
     def __init__(self, id:str, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:int) -> None:
         
         self._id:str = None

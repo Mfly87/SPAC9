@@ -1,7 +1,7 @@
-from .abs_obj import AbsObj
+from .abs_obj import AbsSQLObj
 from ..guardFunctions.float_guard import float_is_zero_or_greater
 
-class NutritionalValueObj(AbsObj):
+class NutritionalValueObj(AbsSQLObj):
     
     def __init__(self, calories:float, protein:float, fat:float, sodium:float, fiber:float, carbohydrates:float, sugars:float, potassium:float, vitamins:float) -> None:
         self._calories:float = None

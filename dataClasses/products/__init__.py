@@ -1,2 +1,2 @@
-from .dataTypes import AbsObj, CerealObj, NutritionalValueObj
+from .dataTypes import AbsSQLObj, CerealObj, NutritionalValueObj
 from .product_factory import ProductFactory

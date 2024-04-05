@@ -3,7 +3,7 @@ from mysql.connector import MySQLConnection, Error
 
 from designPatterns import Singleton
 
-from dataClasses.products import AbsObj
+from dataClasses.products import AbsSQLObj
 
 
 class MySQLHandler(Singleton):
@@ -11,7 +11,7 @@ class MySQLHandler(Singleton):
     _current_database: str = ""
     _database_connector: MySQLConnection = None
 
-    _table_classes: dict[str, AbsObj | type] = dict()
+    _table_classes: dict[str, AbsSQLObj | type] = dict()
     '''
     def __init__(self, database_connector: MySQLConnection) -> None:
         self._database_connector: MySQLConnection = database_connector
@@ -40,7 +40,7 @@ class MySQLHandler(Singleton):
         return self._current_database
     
     @property
-    def table_classes(self) -> dict[str, AbsObj | type]:
+    def table_classes(self) -> dict[str, AbsSQLObj | type]:
         return self._table_classes
     
 
@@ -48,7 +48,7 @@ class MySQLHandler(Singleton):
 
 
 
-    def get_table_types(self) -> list[AbsObj | type]:
+    def get_table_types(self) -> list[AbsSQLObj | type]:
         _name_list = self.get_table_names()
         _type_list = []
         for _name in _name_list:
@@ -75,24 +75,29 @@ class MySQLHandler(Singleton):
         self._current_database = database_name
 
     # This function should likely stored somewhere else, simply because of the danger
-    def drop_table(self, class_type: AbsObj | type) -> None:
+    def drop_table(self, class_type: AbsSQLObj | type) -> None:
         _query = MySQLQueryGenerator.drop_table_for_class(class_type)
         self.execute_querty(_query)
 
 
-    def create_table(self, class_type: AbsObj) -> None:
+    def create_table(self, class_type: AbsSQLObj) -> None:
         _create_table_query = MySQLQueryGenerator.generate_table_for_class(class_type)
         self.execute_querty(_create_table_query)
 
-    def search(self, class_type: AbsObj | type,*, search_term: str = ""):
+    def search(self, class_type: AbsSQLObj | type,*, search_term: str = ""):
+        if search_term:
+            search_term = " WHERE " + search_term
         _query = MySQLQueryGenerator().generate_search_query(class_type, search_term = search_term)
-        return self.execute_fetch_querty(_query)
+        _dict_list = self.execute_fetch_querty(_query)
+        for _dict in _dict_list:
+            _dict |= {"class": class_type.__name__}
+        return _dict_list
         
-    def update_item(self, unique_data: AbsObj):
+    def update_item(self, unique_data: AbsSQLObj):
         _query = MySQLQueryGenerator.generate_update_query(unique_data)
         self.execute_querty(_query)
         
-    def add_item(self, unique_data: AbsObj):
+    def add_item(self, unique_data: AbsSQLObj):
         _query = MySQLQueryGenerator.generate_insert_query(unique_data)
         self.execute_querty(_query)
 
@@ -103,7 +108,7 @@ class MySQLHandler(Singleton):
 
 
 
-    def execute_insert_many_querty(self, _unique_data_list: list[AbsObj]) -> bool:
+    def execute_insert_many_querty(self, _unique_data_list: list[AbsSQLObj]) -> bool:
         if not _unique_data_list:
             return
         

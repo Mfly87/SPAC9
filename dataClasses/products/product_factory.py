@@ -1,4 +1,4 @@
-from .dataTypes import AbsObj, NutritionalValueObj, CerealObj
+from .dataTypes import AbsSQLObj, NutritionalValueObj, CerealObj
 from faker import Faker
 from typing import Callable
 
@@ -8,14 +8,14 @@ class ProductFactory():
     _faker = Faker()
     
     @staticmethod
-    def _create_list_of_valid_objects(_obj: AbsObj) -> list[AbsObj]:
+    def _create_list_of_valid_objects(_obj: AbsSQLObj) -> list[AbsSQLObj]:
         #if not _obj.is_valid():
             #print(_obj.to_string())
         return [_obj] if _obj.is_valid() else []
     
 
     @staticmethod
-    def create_from_build_dict(build_dict: dict[str,any]) -> list[AbsObj]:
+    def create_from_build_dict(build_dict: dict[str,any]) -> list[AbsSQLObj]:
         if "class" not in build_dict:
             return []
         _class_name = build_dict["class"]
@@ -35,7 +35,7 @@ class ProductFactory():
 
 
     @staticmethod
-    def create_from_build_values(build_list: list[any]) -> list[AbsObj]:
+    def create_from_build_values(build_list: list[any]) -> list[AbsSQLObj]:
         _class_name = build_list[0]
         _func, _class_type = ProductFactory._get_creation_func(_class_name)
 
@@ -47,7 +47,7 @@ class ProductFactory():
         _obj_build_list = []
 
         for _value_type in _class_type.get_types():
-            if not issubclass(_value_type, AbsObj):
+            if not issubclass(_value_type, AbsSQLObj):
                 _obj_build_list.append( build_list.pop(0) )
             else:
                 _sub_list_len = len(_value_type.get_build_headers(_value_type)) - 1
@@ -66,14 +66,14 @@ class ProductFactory():
 
 
     @staticmethod
-    def create_from_nested_dict(**kwargs) -> list[AbsObj]:
+    def create_from_nested_dict(**kwargs) -> list[AbsSQLObj]:
 
         for _key in kwargs:
             _value = kwargs[_key]
             if not isinstance(_value, dict):
                 continue
             
-            _obj_list: list[AbsObj] = ProductFactory.create_from_nested_dict(**_value)
+            _obj_list: list[AbsSQLObj] = ProductFactory.create_from_nested_dict(**_value)
             _new_value = _obj_list[0] if _obj_list else None
             kwargs |= {_key: _new_value}
 
@@ -85,7 +85,7 @@ class ProductFactory():
         return _func(**kwargs)
 
     @staticmethod
-    def _get_creation_func(class_name:str) -> tuple[Callable[[dict[str, any]],list[AbsObj]], AbsObj]:
+    def _get_creation_func(class_name:str) -> tuple[Callable[[dict[str, any]],list[AbsSQLObj]], AbsSQLObj]:
         match class_name:
             case NutritionalValueObj.__name__:
                 return ProductFactory.create_nutritional_value, NutritionalValueObj
@@ -95,7 +95,7 @@ class ProductFactory():
                 return ProductFactory.create_null, None
 
     @staticmethod
-    def create_null(*args, **kwargs) -> list[AbsObj]:
+    def create_null(*args, **kwargs) -> list[AbsSQLObj]:
         return []
 
     @staticmethod
