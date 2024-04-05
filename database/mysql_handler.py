@@ -110,6 +110,7 @@ class MySQLHandler:
                     _values = MySQLQueryGenerator._get_values(_unique_data)
                     library_data.append(tuple(_values))
                 cursor.executemany(_fill_table_query, library_data)
+                self.database_connector.commit()
                 return True
         except Error as e:
             print(f"An error occured during an executemany query {e}")

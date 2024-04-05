@@ -118,12 +118,12 @@ class MySQLQueryGenerator():
 
     @staticmethod
     def _get_headers(class_type: AbsObj):
-        return class_type.get_build_headers(class_type)[1:]
+        return class_type.get_build_headers(class_type)[1:3]
     
     @staticmethod
     def _get_types(class_type: AbsObj):
-        return class_type.get_build_types(class_type)[1:]
+        return class_type.get_build_types(class_type)[1:3]
     
     @staticmethod
     def _get_values(abs_obj: AbsObj):
-        return abs_obj.get_build_values()[1:]
+        return abs_obj.get_build_values()[1:3]
