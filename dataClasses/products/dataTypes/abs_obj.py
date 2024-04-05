@@ -15,18 +15,17 @@ class AbsObj(AbsDataClass):
     def to_list(self) -> list[any]:
         pass
     
-    def to_dict(self) -> dict[str,any]:
+    def to_nested_dict(self) -> dict[str,any]:
         _list = self.to_list()
         for i, _value in enumerate(_list):
             if _value is None:
                 continue
             if issubclass(type(_value), AbsObj):
-                _list[i] = _value.to_dict()
+                _list[i] = _value.to_nested_dict()
 
         _dict = dict(zip(self.get_headers(), _list))
         _dict |= {"class": self.__class__.__name__}
-        return _dict
-    
+        return _dict    
 
     def get_build_values(self) -> list[any]:
         _list_of_values: list = [self.__class__.__name__]
@@ -46,12 +45,18 @@ class AbsObj(AbsDataClass):
             else:
                 _list_of_headers.append(_value)
         return _list_of_headers
+    
+    def to_build_dict(self):
+        _list_of_values = self.get_build_values()
+        _list_of_headers = self.get_build_headers(type(self))
+
+        return dict(zip(_list_of_headers, _list_of_values))
 
 
 
     def is_valid(self):
         '''Returns False if any parameters have not been set'''
-        _dict_of_obj = self.to_dict()
+        _dict_of_obj = self.to_nested_dict()
         return self._is_dict_of_obj_valid(_dict_of_obj)
     
     def _is_dict_of_obj_valid(self, dict_of_obj: dict) -> bool:

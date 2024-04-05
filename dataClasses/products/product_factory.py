@@ -10,9 +10,34 @@ class ProductFactory():
     
 
     @staticmethod
-    def create_from_build_values(build_list: list[any]) -> list[AbsObj]:
-        _class_name = build_list.pop(0)
+    def create_from_build_dict(build_dict: dict[str,any]) -> list[AbsObj]:
+        if "class" not in build_dict:
+            return []
+        _class_name = build_dict["class"]
         _func, _class_type = ProductFactory._get_creation_func(_class_name)
+        
+        _list_of_headers = _class_type.get_build_headers(_class_type)
+        _build_list = []
+        for _key in _list_of_headers:
+            if _key not in build_dict:
+                return []
+            _value = build_dict[_key]
+            _build_list.append(_value)
+        
+        return ProductFactory.create_from_build_values(_build_list)
+        
+
+
+
+    @staticmethod
+    def create_from_build_values(build_list: list[any]) -> list[AbsObj]:
+        _class_name = build_list[0]
+        _func, _class_type = ProductFactory._get_creation_func(_class_name)
+
+        _list_len = len(_class_type.get_build_headers(_class_type))
+        if _list_len != len(build_list):
+            return []
+        build_list = build_list[1:]
 
         _obj_build_list = []
 
@@ -36,14 +61,14 @@ class ProductFactory():
 
 
     @staticmethod
-    def create_from_dict(**kwargs) -> list[AbsObj]:
+    def create_from_nested_dict(**kwargs) -> list[AbsObj]:
 
         for _key in kwargs:
             _value = kwargs[_key]
             if not isinstance(_value, dict):
                 continue
             
-            _obj_list: list[AbsObj] = ProductFactory.create_from_dict(**_value)
+            _obj_list: list[AbsObj] = ProductFactory.create_from_nested_dict(**_value)
             _new_value = _obj_list[0] if _obj_list else None
             kwargs |= {_key: _new_value}
 

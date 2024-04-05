@@ -35,11 +35,17 @@ _out = ProductFactory.create_from_build_values(_obj.get_build_values())
 for _o in _out:
     print(_o.to_string())
 
-_o_list: list[AbsObj] = ProductFactory.create_from_dict(**_obj.to_dict())
+
+
+
+_o_list: list[AbsObj] = ProductFactory.create_from_nested_dict(**_obj.to_nested_dict())
 for _o in _o_list:
     print(_o.to_string())
 
 
+_o_list: list[AbsObj] = ProductFactory.create_from_build_dict(_obj.to_build_dict())
+for _o in _o_list:
+    print(_o.to_string())
 '''
 print(_obj.get_build_values())
 
