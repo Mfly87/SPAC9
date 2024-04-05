@@ -37,6 +37,16 @@ class AbsObj(AbsDataClass):
         return _list_of_values
 
     @staticmethod
+    def get_build_types(_class_type) -> list[any]:
+        _list_of_headers: list = [str]
+        for _type in _class_type.get_types():
+            if issubclass(_type, AbsObj):
+                _list_of_headers += AbsObj.get_build_types(_type)[1:]
+            else:
+                _list_of_headers.append(_type)
+        return _list_of_headers
+
+    @staticmethod
     def get_build_headers(_class_type) -> list[any]:
         _list_of_headers: list = ["class"]
         for _value, _type in zip(_class_type.get_headers(), _class_type.get_types()):

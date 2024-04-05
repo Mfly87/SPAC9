@@ -73,17 +73,9 @@ class MySQLHandler:
         self.execute_querty(_query)
 
 
-    def create_table(self, unique_data_list: list[AbsObj]) -> None:
-        if not unique_data_list:
-            return
-        
-        class_type = type(unique_data_list[0])
-
+    def create_table(self, class_type: AbsObj) -> None:
         _create_table_query = MySQLQueryGenerator.generate_table_for_class(class_type)
         self.execute_querty(_create_table_query)
-
-        _fill_table_query = MySQLQueryGenerator.generate_insert_many_query(class_type)
-        self.execute_many_querty(_fill_table_query, unique_data_list)
 
     def search(self, class_type: AbsObj | type,*, search_term: str = ""):
         _query = MySQLQueryGenerator().generate_search_query(class_type, search_term = search_term)
@@ -95,7 +87,6 @@ class MySQLHandler:
         
     def add_item(self, unique_data: AbsObj):
         _query = MySQLQueryGenerator.generate_insert_query(unique_data)
-        print(_query)
         self.execute_querty(_query)
 
 
@@ -105,13 +96,20 @@ class MySQLHandler:
 
 
 
-    def execute_many_querty(self, _query: str, _unique_data_list: list[AbsObj]) -> bool:
+    def execute_insert_many_querty(self, _unique_data_list: list[AbsObj]) -> bool:
+        if not _unique_data_list:
+            return
+        
+        class_type = type(_unique_data_list[0])
+        _fill_table_query = MySQLQueryGenerator.generate_insert_many_query(class_type)
+
         try:
             with self.database_connector.cursor() as cursor:
                 library_data = []
                 for _unique_data in _unique_data_list:
-                    library_data.append(tuple(_unique_data.to_list()))
-                cursor.executemany(_query, library_data)
+                    _values = MySQLQueryGenerator._get_values(_unique_data)
+                    library_data.append(tuple(_values))
+                cursor.executemany(_fill_table_query, library_data)
                 return True
         except Error as e:
             print(f"An error occured during an executemany query {e}")

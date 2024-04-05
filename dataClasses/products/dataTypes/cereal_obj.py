@@ -40,7 +40,7 @@ class CerealObj(AbsObj):
     def name(self, value) -> None:
         _value = str_is_not_empty(value)
         if _value is not None:
-            self._name = value
+            self._name = _value
 
     @property
     def manufacturer(self) -> str:
@@ -49,7 +49,7 @@ class CerealObj(AbsObj):
     def manufacturer(self, value) -> None:
         _value = str_is_not_empty(value)
         if _value is not None:
-            self._manufacturer = value
+            self._manufacturer = _value
 
     @property
     def serve_type(self) -> str:
@@ -58,7 +58,7 @@ class CerealObj(AbsObj):
     def serve_type(self, value) -> None:
         _value = str_is_not_empty(value)
         if _value is not None:
-            self._serve_type = value
+            self._serve_type = _value
 
     @property
     def nutritions(self) -> NutritionalValueObj:
@@ -78,7 +78,7 @@ class CerealObj(AbsObj):
     def shelf_number(self, value) -> None:
         _value = int_is_one_or_greater(value)
         if _value is not None:
-            self._shelf_number = value
+            self._shelf_number = _value
 
     @property
     def weight_per_serving(self) -> float:
@@ -87,7 +87,7 @@ class CerealObj(AbsObj):
     def weight_per_serving(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._weight_per_serving = value
+            self._weight_per_serving = _value
 
     @property
     def cups_per_serving(self) -> float:
@@ -96,7 +96,7 @@ class CerealObj(AbsObj):
     def cups_per_serving(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._cups_per_serving = value
+            self._cups_per_serving = _value
 
     @property
     def rating(self) -> int:
@@ -105,7 +105,7 @@ class CerealObj(AbsObj):
     def rating(self, value) -> None:
         _value = int_is_zero_or_greater(value)
         if _value is not None:
-            self._rating = value
+            self._rating = _value
 
     @staticmethod
     def get_headers() -> list[str]:

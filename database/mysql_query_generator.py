@@ -43,37 +43,39 @@ class MySQLQueryGenerator():
 
     @staticmethod
     def _get_column_values(unique_data: AbsObj):
-        _list = unique_data.to_list()
-        return ", ".join(_list)
+        _values = MySQLQueryGenerator._get_values(unique_data)
+        return ", ".join(_values)
     
     @staticmethod
     def _unique_data_update_values(unique_data: AbsObj):
-        _headers = unique_data.get_headers()
+        _headers = MySQLQueryGenerator._get_headers()
         _sql_value_list = MySQLQueryGenerator._sql_value_list(unique_data)
         _zip = ["%s = %s" % (a, b) for a, b in zip(_headers, _sql_value_list)]
         return ", ".join(_zip)
 
     @staticmethod
     def _sql_value_list(unique_data: AbsObj) -> list[str]:
-        _list = []
-        for _item in unique_data.to_list():
-            if isinstance(_item, str):
-                _list.append("'%s'" % (_item))
+        _string_values = []
+        for _value in MySQLQueryGenerator._get_values(unique_data):
+            if isinstance(_value, str):
+                _string_values.append("'%s'" % (_value))
             else:
-                _list.append("%s" % (_item))
-        return _list
+                _string_values.append("%s" % (_value))
+        return _string_values
 
 
 
 
     @staticmethod
     def _get_sql_data_type_list(class_type: AbsObj | type) -> str:
-        _type_list = class_type.get_types()
+        _type_list = MySQLQueryGenerator._get_types(class_type)
         return map(MySQLQueryGenerator._get_sql_data_type, _type_list)
-
+    
     @staticmethod
     def _get_sql_data_type(var_type: type) -> str:
-        if var_type is int:
+        if var_type is float:
+            return "FLOAT"
+        elif var_type is int:
             return "INT"
         else:
             return "VARCHAR(255)"
@@ -84,16 +86,16 @@ class MySQLQueryGenerator():
             if not isinstance(class_type, type):
                 class_type = class_type.__class__
             class_type = class_type.__name__
-        return str(class_type)
+        return str(class_type).lower()
         
     @staticmethod
     def _get_column_names(class_type: AbsObj):
-        _headers = class_type.get_headers()
+        _headers = MySQLQueryGenerator._get_headers(class_type)
         return ', '.join(_headers)
         
     @staticmethod
     def _get_column_symbols(class_type: AbsObj):
-        _headers = class_type.get_headers()
+        _headers = MySQLQueryGenerator._get_headers(class_type)
         _column_symbols = ['%s'] * len(_headers)
         return ', '.join(_column_symbols)
 
@@ -109,7 +111,19 @@ class MySQLQueryGenerator():
         
     @staticmethod
     def _get_sql_definition_list(class_type: AbsObj) -> str:
-        _headers = class_type.get_headers()
+        _headers = MySQLQueryGenerator._get_headers(class_type)
         _types = MySQLQueryGenerator._get_sql_data_type_list(class_type)
         return ["%s %s" % (a, b) for a, b in zip(_headers, _types)]
         
+
+    @staticmethod
+    def _get_headers(class_type: AbsObj):
+        return class_type.get_build_headers(class_type)[1:]
+    
+    @staticmethod
+    def _get_types(class_type: AbsObj):
+        return class_type.get_build_types(class_type)[1:]
+    
+    @staticmethod
+    def _get_values(abs_obj: AbsObj):
+        return abs_obj.get_build_values()[1:]
