@@ -34,8 +34,7 @@ sql_handler.drop_table(CerealObj)
 sql_handler.create_table(CerealObj)
 _ret = sql_handler.insert_many_querty(_list)
 
-#app.run(debug=True)
-
+'''
 print(len(sql_handler.search(CerealObj)))
 
 _obj = _list[0]
@@ -44,6 +43,7 @@ for i in range(10):
     _obj.id = abc[i:i+4]
     sql_handler.insert_many_querty([_obj])
 
-
-
 print(len(sql_handler.search(CerealObj)))
+'''
+
+app.run(debug=True)
