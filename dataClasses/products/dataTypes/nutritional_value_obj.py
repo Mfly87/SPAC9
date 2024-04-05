@@ -1,7 +1,7 @@
-from .abs_obj import AbsObj
+from .abs_obj import AbsSQLObj
 from ..guardFunctions.float_guard import float_is_zero_or_greater
 
-class NutritionalValueObj(AbsObj):
+class NutritionalValueObj(AbsSQLObj):
     
     def __init__(self, calories:float, protein:float, fat:float, sodium:float, fiber:float, carbohydrates:float, sugars:float, potassium:float, vitamins:float) -> None:
         self._calories:float = None
@@ -38,7 +38,7 @@ class NutritionalValueObj(AbsObj):
     def calories(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._calories = value
+            self._calories = _value
 
     @property
     def protein(self) -> float:
@@ -47,7 +47,7 @@ class NutritionalValueObj(AbsObj):
     def protein(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._protein = value
+            self._protein = _value
             
     @property
     def fat(self) -> float:
@@ -56,7 +56,7 @@ class NutritionalValueObj(AbsObj):
     def fat(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._fat = value
+            self._fat = _value
 
     @property
     def sodium(self) -> float:
@@ -65,7 +65,7 @@ class NutritionalValueObj(AbsObj):
     def sodium(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._sodium = value
+            self._sodium = _value
 
     @property
     def fiber(self) -> float:
@@ -74,7 +74,7 @@ class NutritionalValueObj(AbsObj):
     def fiber(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._fiber = value
+            self._fiber = _value
             
     @property
     def carbohydrates(self) -> float:
@@ -83,7 +83,7 @@ class NutritionalValueObj(AbsObj):
     def carbohydrates(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._carbohydrates = value
+            self._carbohydrates = _value
 
     @property
     def sugars(self) -> float:
@@ -92,7 +92,7 @@ class NutritionalValueObj(AbsObj):
     def sugars(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._sugars = value
+            self._sugars = _value
 
     @property
     def potassium(self) -> float:
@@ -101,7 +101,7 @@ class NutritionalValueObj(AbsObj):
     def potassium(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._potassium = value
+            self._potassium = _value
             
     @property
     def vitamins(self) -> float:
@@ -110,7 +110,7 @@ class NutritionalValueObj(AbsObj):
     def vitamins(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._vitamins = value
+            self._vitamins = _value
 
     @staticmethod
     def get_headers() -> list[str]:

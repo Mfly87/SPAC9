@@ -9,6 +9,7 @@ def int_is_int(value: any) -> int | None:
             value = int(value)
             return value
         except:
+            print(value)
             return None
     return None
     

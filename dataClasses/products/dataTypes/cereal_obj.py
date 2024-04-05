@@ -1,4 +1,4 @@
-from .abs_obj import AbsObj
+from .abs_obj import AbsSQLObj
 
 from ..guardFunctions.float_guard import float_is_zero_or_greater
 from ..guardFunctions.int_guard import int_is_zero_or_greater, int_is_one_or_greater
@@ -6,9 +6,12 @@ from ..guardFunctions.string_guard import str_is_not_empty
 
 from .nutritional_value_obj import NutritionalValueObj
 
-class CerealObj(AbsObj):
-    def __init__(self, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:int) -> None:
+class CerealObj(AbsSQLObj):
+    def __init__(self, id:str, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:int) -> None:
         
+        self._id:str = None
+        self.id:str = id
+
         self._name:str = None
         self.name:str = name
 
@@ -34,13 +37,23 @@ class CerealObj(AbsObj):
         self.rating:int = rating
 
     @property
+    def id(self) -> str:
+        return self._id
+    @id.setter
+    def id(self, value) -> None:
+        _value = str_is_not_empty(value)
+        if _value is not None:
+            self._id = _value
+
+
+    @property
     def name(self) -> str:
         return self._name
     @name.setter
     def name(self, value) -> None:
         _value = str_is_not_empty(value)
         if _value is not None:
-            self._name = value
+            self._name = _value
 
     @property
     def manufacturer(self) -> str:
@@ -49,7 +62,7 @@ class CerealObj(AbsObj):
     def manufacturer(self, value) -> None:
         _value = str_is_not_empty(value)
         if _value is not None:
-            self._manufacturer = value
+            self._manufacturer = _value
 
     @property
     def serve_type(self) -> str:
@@ -58,7 +71,7 @@ class CerealObj(AbsObj):
     def serve_type(self, value) -> None:
         _value = str_is_not_empty(value)
         if _value is not None:
-            self._serve_type = value
+            self._serve_type = _value
 
     @property
     def nutritions(self) -> NutritionalValueObj:
@@ -78,7 +91,7 @@ class CerealObj(AbsObj):
     def shelf_number(self, value) -> None:
         _value = int_is_one_or_greater(value)
         if _value is not None:
-            self._shelf_number = value
+            self._shelf_number = _value
 
     @property
     def weight_per_serving(self) -> float:
@@ -87,7 +100,7 @@ class CerealObj(AbsObj):
     def weight_per_serving(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._weight_per_serving = value
+            self._weight_per_serving = _value
 
     @property
     def cups_per_serving(self) -> float:
@@ -96,7 +109,7 @@ class CerealObj(AbsObj):
     def cups_per_serving(self, value) -> None:
         _value = float_is_zero_or_greater(value)
         if _value is not None:
-            self._cups_per_serving = value
+            self._cups_per_serving = _value
 
     @property
     def rating(self) -> int:
@@ -105,11 +118,12 @@ class CerealObj(AbsObj):
     def rating(self, value) -> None:
         _value = int_is_zero_or_greater(value)
         if _value is not None:
-            self._rating = value
+            self._rating = _value
 
     @staticmethod
     def get_headers() -> list[str]:
         return [
+            "id", 
             "name", 
             "manufacturer",
             "serve_type", 
@@ -122,14 +136,15 @@ class CerealObj(AbsObj):
     
     @staticmethod
     def get_types() -> list[type]:
-        return [str, str, NutritionalValueObj, int, float, float, int]
+        return [str, str, str, str, NutritionalValueObj, int, float, float, int]
     
     def to_list(self) -> list[any]:
         return [
+            self.id, 
             self.name, 
             self.manufacturer,
             self.serve_type,
-            None if self.nutritions is None else self.nutritions.to_dict(), 
+            self.nutritions, 
             self.shelf_number, 
             self.weight_per_serving, 
             self.cups_per_serving, 
@@ -139,5 +154,5 @@ class CerealObj(AbsObj):
     def to_string(self) -> str:
         _zip = zip(self.get_headers(), self.to_list())
         _list = ["%s: %s" % (a.split("_")[0], b) for a, b in _zip]
-        del _list[3]
+        del _list[4]
         return " | ".join(_list)
