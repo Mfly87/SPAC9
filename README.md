@@ -24,6 +24,8 @@ The program creates a MySQL database for the different cereals, then sets up a s
 Currently a user can create a GET request and get a list of all objects in the database, or create a GET request with an 'id' to get a specific object.
 It's also possible to do more specific searched using '/results?' followed by the parameters. Adding 'min_' or 'max_' will convert the parameter into greater than and less than opperators.
 
+NOTE: The CSV file used for creating the database is not included.
+
 ## Installation
 
 1. Clone the repo
