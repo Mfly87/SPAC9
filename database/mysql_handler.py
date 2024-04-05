@@ -84,7 +84,7 @@ class MySQLHandler(Singleton):
         _create_table_query = MySQLQueryGenerator.generate_table_for_class(class_type)
         self.execute_querty(_create_table_query)
 
-    def search(self, class_type: AbsSQLObj | type,*, search_term: str = ""):
+    def search(self, class_type: AbsSQLObj | type,*, search_term: str = "") -> list[dict[str,any]]:
         if search_term:
             search_term = " WHERE " + search_term
         _query = MySQLQueryGenerator().generate_search_query(class_type, search_term = search_term)
@@ -108,7 +108,7 @@ class MySQLHandler(Singleton):
 
 
 
-    def execute_insert_many_querty(self, _unique_data_list: list[AbsSQLObj]) -> bool:
+    def insert_many_querty(self, _unique_data_list: list[AbsSQLObj]) -> bool:
         if not _unique_data_list:
             return
         
