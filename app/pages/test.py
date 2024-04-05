@@ -1,6 +1,8 @@
 from flask import render_template, request
 from app import app
 
+from database import MySQLHandler
+
 @app.route("/action_page", methods = ["POST"])
 def AP():
     if request.method == "POST":
@@ -12,4 +14,7 @@ def AP():
             print("DONE")
         except:
             print("UNDONE")
+
+        a:MySQLHandler = MySQLHandler()
+        print(a)
     return render_template("index.html")

@@ -1,4 +1,4 @@
-from design_patterns import Singleton
+from designPatterns import Singleton
 from mysql.connector import MySQLConnection, Error
 from mysql import connector
 

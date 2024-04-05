@@ -7,7 +7,6 @@ def float_is_float(value: any) -> float | None:
         return value
     if isinstance(value, str):
         try:
-            value = value.replace(".","")
             value = float(value)
             return value
         except:

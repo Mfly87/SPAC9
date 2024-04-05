@@ -27,6 +27,7 @@ def get_objects_from_Cereal_csv(path:str, *, delimiter = ";", rows_skipped:int =
         for row in reader:
             replace_shorthand(row)
 
+            row.insert(0, "")
             row.insert(0, CerealObj.__name__)
             for _obj in ProductFactory.create_from_build_values(row):
                 _list.append(_obj)

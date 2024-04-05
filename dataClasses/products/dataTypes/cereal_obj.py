@@ -7,8 +7,11 @@ from ..guardFunctions.string_guard import str_is_not_empty
 from .nutritional_value_obj import NutritionalValueObj
 
 class CerealObj(AbsObj):
-    def __init__(self, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:int) -> None:
+    def __init__(self, id:str, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:int) -> None:
         
+        self._id:str = None
+        self.id:str = id
+
         self._name:str = None
         self.name:str = name
 
@@ -32,6 +35,16 @@ class CerealObj(AbsObj):
 
         self._rating:int = None
         self.rating:int = rating
+
+    @property
+    def id(self) -> str:
+        return self._id
+    @id.setter
+    def id(self, value) -> None:
+        _value = str_is_not_empty(value)
+        if _value is not None:
+            self._id = _value
+
 
     @property
     def name(self) -> str:
@@ -110,6 +123,7 @@ class CerealObj(AbsObj):
     @staticmethod
     def get_headers() -> list[str]:
         return [
+            "id", 
             "name", 
             "manufacturer",
             "serve_type", 
@@ -122,10 +136,11 @@ class CerealObj(AbsObj):
     
     @staticmethod
     def get_types() -> list[type]:
-        return [str, str, str, NutritionalValueObj, int, float, float, int]
+        return [str, str, str, str, NutritionalValueObj, int, float, float, int]
     
     def to_list(self) -> list[any]:
         return [
+            self.id, 
             self.name, 
             self.manufacturer,
             self.serve_type,
@@ -139,5 +154,5 @@ class CerealObj(AbsObj):
     def to_string(self) -> str:
         _zip = zip(self.get_headers(), self.to_list())
         _list = ["%s: %s" % (a.split("_")[0], b) for a, b in _zip]
-        del _list[3]
+        del _list[4]
         return " | ".join(_list)

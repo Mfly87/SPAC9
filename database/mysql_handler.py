@@ -1,16 +1,23 @@
-from dataClasses.products import AbsObj
 from .mysql_query_generator import MySQLQueryGenerator
-
-from inspect import getmembers, isclass, isabstract
 from mysql.connector import MySQLConnection, Error
 
+from designPatterns import Singleton
 
-class MySQLHandler:
+from dataClasses.products import AbsObj
+
+
+class MySQLHandler(Singleton):
 
     _current_database: str = ""
-    _table_classes: dict[str, AbsObj | type] = dict()
+    _database_connector: MySQLConnection = None
 
+    _table_classes: dict[str, AbsObj | type] = dict()
+    '''
     def __init__(self, database_connector: MySQLConnection) -> None:
+        self._database_connector: MySQLConnection = database_connector
+    '''
+
+    def connect_to_server(self, database_connector: MySQLConnection) -> None:
         self._database_connector: MySQLConnection = database_connector
 
 

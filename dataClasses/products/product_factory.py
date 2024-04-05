@@ -1,11 +1,16 @@
 from .dataTypes import AbsObj, NutritionalValueObj, CerealObj
-
+from faker import Faker
 from typing import Callable
 
 class ProductFactory():
+
+    _id_length = 4
+    _faker = Faker()
     
     @staticmethod
     def _create_list_of_valid_objects(_obj: AbsObj) -> list[AbsObj]:
+        #if not _obj.is_valid():
+            #print(_obj.to_string())
         return [_obj] if _obj.is_valid() else []
     
 
@@ -99,7 +104,14 @@ class ProductFactory():
         return ProductFactory._create_list_of_valid_objects( _obj )
     
     @staticmethod
-    def create_cereal(name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:float) -> list[NutritionalValueObj]:
-        _obj = CerealObj(name, manufacturer, serve_type, nutritions, shelf_number, weight_per_serving, cups_per_serving, rating)
+    def create_cereal(id:str, name:str, manufacturer:str, serve_type:str, nutritions:NutritionalValueObj, shelf_number:int, weight_per_serving:float, cups_per_serving:float, rating:float) -> list[NutritionalValueObj]:
+        id = ProductFactory._generate_id(id)
+        _obj = CerealObj(id, name, manufacturer, serve_type, nutritions, shelf_number, weight_per_serving, cups_per_serving, rating)
         return ProductFactory._create_list_of_valid_objects( _obj )
     
+    @staticmethod
+    def _generate_id(id:str) -> str:
+        if id:
+            return id
+        _len = ProductFactory._id_length
+        return ProductFactory._faker.pystr(min_chars=_len, max_chars=_len).lower()
